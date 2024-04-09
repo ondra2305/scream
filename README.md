@@ -1,4 +1,7 @@
 # TJV Semestrální práce - Scream
+## Základní informace
+Tento projekt vznikl jako semestrální práce na předmět Technologie Java (BI-TJV) v ZS 2023/2024 na FIT ČVUT.
+
 ## Téma projektu, popis
 Scream je nejstrašidelnější platforma na internetu, zaměřena zajména na hororové hry.
 Nabízí širokou sbírku her, ze kterých vám bude běhat mráz po zádech a potit se vám dlaně. Tohle není žádné hraní pro děcka.
@@ -92,9 +95,11 @@ V Docker containeru je potom možné nastavit připojení k databázi pomocí pr
 * DATABASE_PASSWORD=postgres
 
 ## Demo
-Aplikaci jsem na vyzkoušení nahrál na cloud, je dostupná na adrese https://scream.svobodao.cz a REST api na adrese https://scream.svobodao.cz/api/.
+**Update 4/2024:** Aplikace byla nasazená pouze pár týdnů v rámci hodnocení semestrální práce, poté jsem cloud nasazení musel zrušit z důvodu ceny.
 
-Pro nasazení jsem použil Microsoft Azure, kde je aplikace nasazení pomocí Docker Container App a databáze PostgreSQL.
+~~Aplikaci jsem na vyzkoušení nahrál na cloud, je dostupná na adrese https://scream.svobodao.cz a REST api na adrese https://scream.svobodao.cz/api/.~~
+
+~~Pro nasazení jsem použil Microsoft Azure, kde je aplikace nasazení pomocí Docker Container App a databáze PostgreSQL.~~
 
 ### Admin účet
 Do aplikace by se měl automaticky přidat při spuštění uživatel "admin" s heslem "admin", který bude mít práva vytvářet nové hry (na webu přistupovat do "Admin dashboard"). Funkčnost přidání admin práv jinému uživateli není implementovaná, došel čas.
