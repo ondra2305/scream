@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games | Scream</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav th:replace="fragments :: navbar"></nav>
+
+<div class="container mt-4">
+    <div th:if="${error}" class="alert alert-danger">
+        <span th:text="${error}"></span>
+    </div>
+</div>
+<!-- Game Reviews Cards Section -->
+<div th:unless="${leaderboard}" class="container mt-4">
+    <div class="row">
+        <h2><span th:text="${game.name}">Game Title</span> reviews</h2>
+        <p>Total <span th:text="${reviews.size()}"></span></p>
+        <div class="col-md-4" th:each="review : ${reviews}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-user"></i><a class="ml-2"
+                                                                                          th:text=" ${review.writtenBy.username}"
+                                                                                          th:href="@{/players/{username}(username=${review.writtenBy.username})}">Written
+                        by</a></div>
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-calendar-days"></i><span class="ml-2"
+                                                                                                      th:text=" ${review.dateAdded}">Date added</span>
+                    </div>
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-star"></i><span class="ml-2"
+                                                                                             th:text=" ${review.points}">Points</span>
+                    </div>
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-pen"></i><span class="ml-2"
+                                                                                            th:text=" ${review.reviewText}">Review text</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Best games leaderboard -->
+<div th:if="${leaderboard}" class="container mt-4">
+    <div class="row">
+        <div class="container mt-4">
+            <form id="leaderboardForm" th:action="@{/games/leaderboard}" method="get"
+                  class="d-flex justify-content-start align-items-end">
+                <div class="me-2">
+                    <label class="form-label" for="year">Year:</label>
+                    <input type="number" id="year" name="year" class="form-control" th:value="${selectedYear}"
+                           min="2000" max="3000" required>
+                </div>
+                <div class="me-2">
+                    <label class="form-label" for="month">Month:</label>
+                    <select class="form-select" id="month" name="month" required>
+                        <option th:each="month, iterStat : ${months}"
+                                th:value="${iterStat.index + 1}"
+                                th:text="${month}"
+                                th:selected="${iterStat.index + 1 == selectedMonth}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">View Leaderboard</button>
+            </form>
+        </div>
+        <div th:if="${player}" class="container mt-4">
+            <form id="discountForm" th:action="@{/games/discount}" method="post"
+                  class="d-flex justify-content-start align-items-end">
+                <input type="hidden" id="discountFormYear" name="year" th:value="${selectedYear}">
+                <input type="hidden" id="discountFormMonth" name="month" th:value="${selectedMonth}">
+                <div class="me-2">
+                    <label class="form-label" for="topN">Top N to discount:</label>
+                    <input type="number" id="topN" name="topN" class="form-control" min="1" max="10" placeholder="3"
+                           required>
+                </div>
+                <button type="submit" class="btn btn-secondary">Discount top games</button>
+            </form>
+        </div>
+
+        <div class="container mt-4">
+            <h2>Top games Leaderboard for <span th:text="${selectedMonth}">Selected month</span>/<span
+                    th:text="${selectedYear}"></span></h2>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Game title</th>
+                    <th scope="col">Avg rating points</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Leaderboard Entries -->
+                <tr th:each="entry, iterStat : ${leaderboard}">
+                    <th scope="row" th:text="${iterStat.count}">1</th>
+                    <td><a th:text="${entry.gameName}" th:href="@{/games/{id}(id=${entry.gameId})}">Game Title</a></td>
+                    <td th:text="${entry.averageRating}">Game rating</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

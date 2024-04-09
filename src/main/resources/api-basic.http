@@ -1,0 +1,22 @@
+GET http://localhost:8080/api/player
+Accept: application/json
+
+###
+GET http://localhost:8080/api/game
+Accept: application/json
+
+###
+GET http://localhost:8080/api/review
+Accept: application/json
+
+###
+GET http://localhost:8080/api/player/ondrejlol
+Accept: application/json
+
+###
+GET http://localhost:8080/api/game/1
+Accept: application/json
+
+###
+GET http://localhost:8080/api/review/1
+Accept: application/json

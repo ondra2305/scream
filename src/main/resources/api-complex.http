@@ -1,0 +1,76 @@
+POST http://localhost:8080/api/player
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+> {% client.global.set("auth_token", response.body.token); %}
+
+###
+POST http://localhost:8080/api/game
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "My Game",
+  "price": 100,
+  "dateReleased": "2023-12-01"
+}
+
+###
+POST http://localhost:8080/api/game
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "name": "My Game 2",
+  "price": 100,
+  "dateReleased": "2024-01-01"
+}
+
+###
+POST http://localhost:8080/api/player/admin/purchaseGame/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:8080/api/review
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "dateAdded": "2024-01-05",
+  "points": 10,
+  "reviewText": "Best game ever!",
+  "writtenBy": "admin",
+  "belongsTo": 1
+}
+
+###
+GET http://localhost:8080/api/review
+Content-Type: application/json
+
+###
+GET http://localhost:8080/api/game/leaderboard/2024/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:8080/api/game/discount/2024/1/1
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:8080/api/game/discount/2024/1/1
+Content-Type: application/json

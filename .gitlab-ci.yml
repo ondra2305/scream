@@ -1,0 +1,33 @@
+stages:
+  - build
+  - package
+
+build-app:
+  stage: build
+  image: gradle:jdk17
+  script:
+    - gradle build -x test
+  artifacts:
+    name: "Gradle artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
+    paths:
+      - build/libs/*.jar
+
+create-container:
+  stage: package
+  image: $CI_REGISTRY/ict/images/alpine/ci:latest
+  variables:
+    BUILDAH_ISOLATION: chroot
+    GITLAB_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    AZURE_IMAGE_TAG: $AZURE_REGISTRY_URL/scream/tjv_semestral_work:latest
+  before_script:
+    - apk add buildah fuse-overlayfs
+  script:
+    # Login to GitLab Registry and Push
+    - buildah login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - buildah build --tag $GITLAB_IMAGE_TAG -f Dockerfile
+    - buildah push --retry 3 $GITLAB_IMAGE_TAG
+    # Login to Azure Container Registry and Push
+    - buildah login -u $AZURE_REGISTRY_USER -p $AZURE_REGISTRY_PASSWORD $AZURE_REGISTRY_URL
+    - buildah tag $GITLAB_IMAGE_TAG $AZURE_IMAGE_TAG
+    - buildah push --retry 3 $AZURE_IMAGE_TAG
+

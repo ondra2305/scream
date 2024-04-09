@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/scream
+      DATABASE_USERNAME: scream
+      DATABASE_PASSWORD: scream
+    depends_on:
+      - db
+
+  db:
+    image: bitnami/postgresql:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRESQL_DATABASE: scream
+      POSTGRESQL_USERNAME: scream
+      POSTGRESQL_PASSWORD: scream
+    volumes:
+      - postgres_data:/bitnami/postgresql
+
+volumes:
+  postgres_data:
+

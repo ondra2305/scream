@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players | Scream</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav th:replace="fragments :: navbar"></nav>
+
+<!-- Players Section -->
+<div class="container mt-4" th:unless="${reviewAuthor}">
+    <div class="row">
+        <h2>Players</h2>
+        <p>Total <span th:text="${players.size()}"></span></p>
+        <div class="col-md-4" th:each="player : ${players}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h4 class="card-title" th:text="${player.username}">Player username</h4>
+                    <div class="card-text d-flex mb-2">
+                        <i class="fa-solid fa-clock"></i>
+                        <span th:text="${player.hoursPlayed}">Hours Played</span>
+                    </div>
+
+                    <!-- List of Owned Games -->
+                    <p>Owned games:</p>
+                    <ul>
+                        <li th:each="game : ${player.ownedGames}"><a th:text="${game.name}"
+                                                                     th:href="@{/games/{id}(id=${game.id})}">Game
+                            Name</a></li>
+                    </ul>
+
+                    <a th:href="@{/players/{id}(id=${player.username})}" class="btn btn-primary">View reviews</a>
+                    <a th:if="${user}" th:href="@{/players/delete/{username}(username=${player.username})}"
+                       class="btn btn-danger">Delete player</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Player Reviews Cards Section -->
+<div class="container mt-4" th:if="${reviewAuthor}">
+    <div class="row">
+        <h2><span th:text="${reviewAuthor.username}">Username</span> reviews</h2>
+        <p>Total <span th:text="${reviews.size()}"></span></p>
+        <div class="col-md-4" th:each="review : ${reviews}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h4 class="card-title" th:text="${review.belongsTo.name}">Game title</h4>
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-calendar-days"></i><span class="ml-2"
+                                                                                                      th:text=" ${review.dateAdded}">Date added</span>
+                    </div>
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-star"></i><span class="ml-2"
+                                                                                             th:text=" ${review.points}">Points</span>
+                    </div>
+                    <div class="card-text d-flex mb-2"><i class="fa-solid fa-pen"></i><span class="ml-2"
+                                                                                            th:text=" ${review.reviewText}">Review text</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
